@@ -13,6 +13,16 @@ const Main = (): React.JSX.Element => {
         setDbsToLoad([...dbsToLoad, db]);
     }
 
+    const handleDb = (db: string): void => {
+        // Called when message received from main process
+        window.api.receive("fromMain", (data) => {
+            console.log(`Received ${data} from main process`);
+        });
+
+        // Send a message to the main process
+        window.api.send("toMain", "some data");
+    }
+
     return (
         <>
             <div className={"main"}>
@@ -30,10 +40,13 @@ const Main = (): React.JSX.Element => {
                                         );
                                     })
                                 }
-                                <button onClick={() => appendDb("Test")}>Append Database</button>
+                                <button onClick={() => handleDb("Test")} className={"openFile"}>Append Database</button>
                             </div>
                             <div className={"right-content"}>
                                 <h1 className={"main-content-title"}>Main Page</h1>
+                                <div className={"data"}>
+
+                                </div>
                             </div>
                         </div>
                     ) : (
