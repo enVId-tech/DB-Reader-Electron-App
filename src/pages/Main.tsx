@@ -1,26 +1,33 @@
 import React from "react";
 import './main.scss';
 
+// Called when message received from main process
+window.api.receive("fromMain", (data) => {
+
+
+    console.log(`Received ${JSON.stringify(data)} from main process`);
+});
+
 const Main = (): React.JSX.Element => {
     const [pageState, setPageState] = React.useState<string>("");
     const [dbsToLoad, setDbsToLoad] = React.useState<string[]>([]);
+
+    const inputRef = React.useRef<HTMLInputElement>(null);
 
     React.useEffect(() => {
         setPageState("Main");
     }, []);
 
-    const appendDb = (db: string): void => {
-        setDbsToLoad([...dbsToLoad, db]);
-    }
+    const appendDb = (db: string | null): void => {
+        const file = inputRef.current?.files?.item(0);
 
-    const handleDb = (db: string): void => {
-        // Called when message received from main process
-        window.api.receive("fromMain", (data) => {
-            console.log(`Received ${data} from main process`);
-        });
+        if (!file) {
+            return;
+        }
 
-        // Send a message to the main process
-        window.api.send("toMain", "some data");
+        console.log("Sending");
+        window.api.send("toMain", { name: file.name, path: file.path });
+
     }
 
     return (
@@ -40,7 +47,7 @@ const Main = (): React.JSX.Element => {
                                         );
                                     })
                                 }
-                                <button onClick={() => handleDb("Test")} className={"openFile"}>Append Database</button>
+                                <input type={"file"} ref={inputRef} onChange={(e) => appendDb(e.target.value)} />
                             </div>
                             <div className={"right-content"}>
                                 <h1 className={"main-content-title"}>Main Page</h1>

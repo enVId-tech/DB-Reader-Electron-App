@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import started from 'electron-squirrel-startup';
 
+const sqlite3 = require('sqlite3').verbose();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -59,13 +60,26 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 ipcMain.on("toMain", (event, args) => {
-  fs.readFile("C:/Users/theli/Documents/comptia.txt", (error, data) => {
-    // Do something with file contents
+  const file = args;
 
-    const responseObj = {
-        data: data + " is now in the main process",
-        error: error
+  console.log(file);
+
+  const filePath = app.getPath("appData") + "\\" + file.name;
+  console.log(filePath);
+  fs.readFile(filePath, (error, data) => {
+    // Do something with file contents
+    const db = new sqlite3.Database(filePath);
+
+    const responseObj: { name: string, rows: any[] } = {
+        name: file.name,
+        rows: []
     }
+
+    db.serialize(() => {
+      db.each("SELECT * FROM sqlite_master", (err, row) => {
+        responseObj.rows.push(row);
+      });
+    });
 
     // Send result back to renderer process
     win.webContents.send("fromMain", responseObj);
