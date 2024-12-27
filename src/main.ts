@@ -60,24 +60,32 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 ipcMain.on("toMain", (event, args) => {
-  const file = args;
+  const { name, data } = args; // Destructure the received object
 
-  console.log(file);
+  const filePath = path.join(app.getPath("userData"), name);
 
-  const filePath = app.getPath("appData") + "\\" + file.name;
   console.log(filePath);
-  fs.readFile(filePath, (error, data) => {
-    // Do something with file contents
-    const db = new sqlite3.Database(filePath);
 
-    const responseObj: { name: string, rows: any[] } = {
-        name: file.name,
-        rows: []
+  fs.readFile(filePath, (error, data) => {
+    if (error) {
+      console.error(error);
+      return;
     }
 
+    const db = new sqlite3.Database(filePath);
+
+    // Create a response object
+    const responseObj: { rows: any[] } = {
+      rows: [],
+    };
+
     db.serialize(() => {
-      db.each("SELECT * FROM sqlite_master", (err, row) => {
-        responseObj.rows.push(row);
+      db.each("SELECT * FROM sqlite_master", (err: string, row: any) => {
+        try {
+          responseObj.rows.push(row);
+        } catch (e) {
+          console.error(e);
+        }
       });
     });
 
@@ -85,3 +93,4 @@ ipcMain.on("toMain", (event, args) => {
     win.webContents.send("fromMain", responseObj);
   });
 });
+

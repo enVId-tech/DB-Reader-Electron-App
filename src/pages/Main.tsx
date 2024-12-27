@@ -3,8 +3,6 @@ import './main.scss';
 
 // Called when message received from main process
 window.api.receive("fromMain", (data) => {
-
-
     console.log(`Received ${JSON.stringify(data)} from main process`);
 });
 
@@ -25,9 +23,12 @@ const Main = (): React.JSX.Element => {
             return;
         }
 
-        console.log("Sending");
-        window.api.send("toMain", { name: file.name, path: file.path });
+        const reader = new FileReader();
+        reader.onload = () => {
+            window.api.send("toMain", { name: file.name, data: reader.result });
+        }
 
+        reader.readAsArrayBuffer(file);
     }
 
     return (
@@ -47,7 +48,7 @@ const Main = (): React.JSX.Element => {
                                         );
                                     })
                                 }
-                                <input type={"file"} ref={inputRef} onChange={(e) => appendDb(e.target.value)} />
+                                <input type={"file"} accept={".db"} ref={inputRef} onChange={(e) => appendDb(e.target.value)} />
                             </div>
                             <div className={"right-content"}>
                                 <h1 className={"main-content-title"}>Main Page</h1>
