@@ -71,7 +71,6 @@ body {
             align-items: center;
             flex-direction: row;
             border: 1px solid black;
-            border-radius: 10px;
             background-color: #e0e0e0;
 
             .error {
@@ -88,6 +87,45 @@ body {
             .data-content {
                 font-size: 15px;
             }
+
+          .main-content {
+            display: flex;
+            flex-direction: column;
+
+            .tables-header {
+              display: flex;
+              text-align: left;
+              width: 95%;
+              justify-content: space-between;
+              border-bottom: 1px solid black;
+            }
+
+            .table-data {
+              display: grid;
+              width: 100%;
+
+              thead {
+                width: 100%;
+                display: grid;
+
+                tr {
+                  display: flex;
+                  width: 100%;
+                  justify-content: space-between;
+                  align-items: center;
+                  border-bottom: 1px solid black;
+                  padding: 10px;
+
+                  th {
+                    width: 20%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

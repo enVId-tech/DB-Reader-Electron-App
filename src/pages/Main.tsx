@@ -5,6 +5,7 @@ import './main.scss';
 const Main = (): React.JSX.Element => {
     const [filePath, setFilePath] = React.useState<string>("");
     const [data, setData] = React.useState<any[]>([]);
+    const [tables, setTables] = React.useState<string[]>([]);
     const [pageState, setPageState] = React.useState<string>("");
     const [dbsToLoad, setDbsToLoad] = React.useState<string[]>([]);
     const [error, setError] = React.useState<string>("");
@@ -35,7 +36,13 @@ const Main = (): React.JSX.Element => {
     const handleReadDatabase = async (file: string): Promise<void> => {
         const response = await window.electronAPI.readDatabase(file);
         if (response.success) {
-            setData(response.data);
+            // Clear data and tables
+            setData([]);
+            setTables([]);
+
+            // Set data and tables
+            setData(response.data.sample_data);
+            setTables(response.data.tables);
             console.log(response.data);
             setError('');
         } else {
@@ -78,7 +85,36 @@ const Main = (): React.JSX.Element => {
                                         error ? (
                                             <p className={"error"}>{error}</p>
                                         ) : (
-                                            <></>
+                                            <div className={"main-content"}>
+                                                <div className={"tables-header"}>
+                                                    {
+                                                        tables.map((table: string, index: number) => {
+                                                            return (
+                                                                <h1 key={index} className={"tableNames"}>{table}</h1>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
+                                                <table className={"table-data"}>
+                                                    <thead>
+                                                    <tr>
+                                                        {
+                                                            data.length > 0 &&
+                                                            Object.keys(data[0]).map((key) => <th key={key}>{key}</th>)
+                                                        }
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {data.map((row, index) => (
+                                                        <tr key={index}>
+                                                            {Object.values(row).map((value: any, i) => (
+                                                                <td key={i}>{value}</td>
+                                                            ))}
+                                                        </tr>
+                                                    ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         )
                                     }
                                 </div>
