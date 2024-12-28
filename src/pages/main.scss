@@ -64,102 +64,30 @@ body {
         justify-content: flex-start;
         align-items: center;
 
-        .content {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
-
-          .content-header {
-            width: 100%;
+        .data {
+            width: 90%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-direction: row;
-            margin-bottom: 20px;
+            border: 1px solid black;
+            border-radius: 10px;
+            background-color: #e0e0e0;
 
-            h1 {
-              font-size: 24px;
-              font-weight: 700;
-              color: #333;
-            }
-
-            button {
-              padding: 10px;
-              border: none;
-              background-color: #f0f0f0;
-              cursor: pointer;
-              transition: 0.3s;
-
-              &:hover {
-                background-color: #e0e0e0;
-              }
-            }
-          }
-
-          .content-body {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-
-            .content-item {
-              width: 100%;
-              display: flex;
-              justify-content: space-between;
+            .error {
+              color: red;
+              font-size: 5vw;
               align-items: center;
-              flex-direction: row;
-              margin-bottom: 10px;
-
-              .item {
-                width: 30%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-
-                .item-header {
-                  width: 100%;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  flex-direction: row;
-                  margin-bottom: 10px;
-
-                  h2 {
-                    font-size: 18px;
-                    font-weight: 700;
-                    color: #333;
-                  }
-                }
-
-                .item-body {
-                  width: 100%;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  flex-direction: column;
-
-                  .item-row {
-                    width: 100%;
-                    display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
-                    flex-direction: row;
-                    margin-bottom: 5px;
-
-                    .item-row-header {
-                      font-size: 14px;
-                      font-weight: 700;
-                      color: #333;
-                    }
-                  }
-                }
-              }
+              text-align: center;
             }
-          }
+
+            .data-title {
+                font-size: 20px;
+            }
+
+            .data-content {
+                font-size: 15px;
+            }
         }
       }
     }

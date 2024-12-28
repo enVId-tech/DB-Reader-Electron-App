@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import started from 'electron-squirrel-startup';
@@ -59,38 +59,63 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.on("toMain", (event, args) => {
-  const { name, data } = args; // Destructure the received object
-
-  const filePath = path.join(app.getPath("userData"), name);
-
-  console.log(filePath);
-
-  fs.readFile(filePath, (error, data) => {
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    const db = new sqlite3.Database(filePath);
-
-    // Create a response object
-    const responseObj: { rows: any[] } = {
-      rows: [],
-    };
-
-    db.serialize(() => {
-      db.each("SELECT * FROM sqlite_master", (err: string, row: any) => {
-        try {
-          responseObj.rows.push(row);
-        } catch (e) {
-          console.error(e);
-        }
-      });
-    });
-
-    // Send result back to renderer process
-    win.webContents.send("fromMain", responseObj);
+ipcMain.handle('select-database', async () => {
+  const result = await dialog.showOpenDialog(win, {
+    title: 'Select SQLite Database File',
+    filters: [{ name: 'SQLite Database', extensions: ['db', 'sqlite'] }],
+    properties: ['openFile'],
   });
+
+  if (result.canceled) {
+    return null;
+  }
+
+  const filePath = result.filePaths[0];
+  return filePath;
 });
 
+ipcMain.handle('read-database', async (event, filePath) => {
+  if (!filePath) {
+    return { success: false, error: 'No file selected.' };
+  }
+
+  let data = {}
+
+  try {
+    const db = new sqlite3.Database(filePath);
+
+    const tables: string[] = await new Promise((resolve, reject): void => {
+      db.all(
+          "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';",
+          [],
+          (err: string, data: any): void => {
+            if (err) reject(err);
+            resolve(data.map(row => row.name));
+          }
+      );
+    });
+
+    if (tables.length === 0) {
+      db.close();
+      return { success: false, error: 'No tables found in the database.' };
+    }
+
+    data = { tables };
+
+    for (const table of tables) {
+      const rows = await new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM ${table}`, [], (err: string, data: any): void => {
+          if (err) reject(err);
+            resolve(data);
+        });
+      });
+
+      data = { ...data, [table]: rows };
+    }
+
+    db.close();
+    return { success: true, data: data };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+});

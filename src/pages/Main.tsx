@@ -2,34 +2,54 @@ import React from "react";
 import './main.scss';
 
 // Called when message received from main process
-window.api.receive("fromMain", (data) => {
-    console.log(`Received ${JSON.stringify(data)} from main process`);
-});
-
 const Main = (): React.JSX.Element => {
+    const [filePath, setFilePath] = React.useState<string>("");
+    const [data, setData] = React.useState<any[]>([]);
     const [pageState, setPageState] = React.useState<string>("");
     const [dbsToLoad, setDbsToLoad] = React.useState<string[]>([]);
-
-    const inputRef = React.useRef<HTMLInputElement>(null);
+    const [error, setError] = React.useState<string>("");
 
     React.useEffect(() => {
         setPageState("Main");
     }, []);
 
-    const appendDb = (db: string | null): void => {
-        const file = inputRef.current?.files?.item(0);
+    React.useEffect(() => {
+        if (filePath) {
+            setDbsToLoad([...dbsToLoad, shortenDbString(filePath)]);
+        }
+    }, [filePath]);
 
-        if (!file) {
-            return;
+    const handleFileSelection = async (): Promise<void> => {
+        const selectedPath = await window.electronAPI.selectDatabase();
+        if (selectedPath) {
+            setFilePath(selectedPath);
         }
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            window.api.send("toMain", { name: file.name, data: reader.result });
+        if (selectedPath) {
+            await handleReadDatabase(selectedPath);
         }
 
-        reader.readAsArrayBuffer(file);
+        return;
+    };
+
+    const handleReadDatabase = async (file: string): Promise<void> => {
+        const response = await window.electronAPI.readDatabase(file);
+        if (response.success) {
+            setData(response.data);
+            console.log(response.data);
+            setError('');
+        } else {
+            console.log(response.error);
+            setError(response.error);
+        }
+    };
+
+    const shortenDbString = (db: string): string => {
+        db = db.substring(0, db.indexOf("\\")) + "\\...\\" + db.substring(db.lastIndexOf("\\") + 1);
+
+        return db;
     }
+
 
     return (
         <>
@@ -48,12 +68,19 @@ const Main = (): React.JSX.Element => {
                                         );
                                     })
                                 }
-                                <input type={"file"} accept={".db"} ref={inputRef} onChange={(e) => appendDb(e.target.value)} />
+                                <button onClick={handleFileSelection} className={"left-nav-button"}>Select Database</button>
+                                {filePath && <p>Selected File: {shortenDbString(filePath)}</p>}
                             </div>
                             <div className={"right-content"}>
                                 <h1 className={"main-content-title"}>Main Page</h1>
                                 <div className={"data"}>
-
+                                    {
+                                        error ? (
+                                            <p className={"error"}>{error}</p>
+                                        ) : (
+                                            <></>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>
