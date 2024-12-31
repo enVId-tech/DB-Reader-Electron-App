@@ -4,7 +4,8 @@ import './main.scss';
 // Called when message received from main process
 const Main = (): React.JSX.Element => {
     const [filePath, setFilePath] = React.useState<string>("");
-    const [data, setData] = React.useState<any[]>([]);
+    const [filePaths, setFilePaths] = React.useState<string[]>([]);
+    const [data, setData] = React.useState<string[]>([]);
     const [tables, setTables] = React.useState<string[]>([]);
     const [pageState, setPageState] = React.useState<string>("");
     const [dbsToLoad, setDbsToLoad] = React.useState<string[]>([]);
@@ -12,6 +13,7 @@ const Main = (): React.JSX.Element => {
 
     React.useEffect(() => {
         setPageState("Main");
+        getDatabaseLinks();
     }, []);
 
     React.useEffect(() => {
@@ -57,6 +59,17 @@ const Main = (): React.JSX.Element => {
         return db;
     }
 
+    const getDatabaseLinks = async (): Promise<void> => {
+        const response = await window.electronAPI.getDatabaseLinks();
+
+        if (response) {
+            setFilePaths(response);
+            for (const db of response) {
+                setDbsToLoad([...dbsToLoad, shortenDbString(db)]);
+            }
+        }
+    }
+
 
     return (
         <>
@@ -69,7 +82,7 @@ const Main = (): React.JSX.Element => {
                                 {
                                     dbsToLoad.map((db: string, index: number) => {
                                         return (
-                                            <div key={index} className={"left-nav-item"}>
+                                            <div key={filePaths[index]} className={"left-nav-item"}>
                                                 <p className={"left-nav-item-text"}>{db}</p>
                                             </div>
                                         );

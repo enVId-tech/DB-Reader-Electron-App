@@ -6,5 +6,6 @@ import { contextBridge, ipcRenderer } from 'electron';
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('electronAPI', {
     selectDatabase: () => ipcRenderer.invoke('select-database'),
-    readDatabase: (filePath) => ipcRenderer.invoke('read-database', filePath),
+    readDatabase: (filePath: string) => ipcRenderer.invoke('read-database', filePath),
+    getDatabaseLinks: () => ipcRenderer.invoke('get-database-links')
 });

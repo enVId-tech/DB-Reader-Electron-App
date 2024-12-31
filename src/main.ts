@@ -70,8 +70,7 @@ ipcMain.handle('select-database', async () => {
     return null;
   }
 
-  const filePath = result.filePaths[0];
-  return filePath;
+  return result.filePaths[0];
 });
 
 ipcMain.handle('read-database', async (event, filePath) => {
@@ -95,8 +94,29 @@ ipcMain.handle('read-database', async (event, filePath) => {
       );
     });
 
+    // Creates a new table with links to other databases
+    const db2 = new sqlite3.Database('./databases.db', (err: string): void => {
+      if (err) {
+        console.error(err.message);
+      }
+
+      // Create table
+      db2.run('CREATE TABLE IF NOT EXISTS databases (name TEXT)', (err: string): void => {
+        if (err) {
+          console.error(err.message);
+        }
+      });
+
+      // Insert data
+      db2.run(`INSERT INTO databases (name) VALUES(?)`, [filePath], (err: string): void => {
+        if (err) {
+          console.error(err.message);
+        }
+      });
+    });
+
     if (tables.length === 0) {
-      db.close();
+      db2.close();
       return { success: false, error: 'No tables found in the database.' };
     }
 
@@ -118,4 +138,23 @@ ipcMain.handle('read-database', async (event, filePath) => {
   } catch (error: any) {
     return { success: false, error: error.message };
   }
+});
+
+ipcMain.handle('get-database-links', async () => {
+    try {
+        const db = new sqlite3.Database('./databases.db');
+
+        const dbs = await new Promise((resolve, reject): void => {
+            db.all('SELECT * FROM databases', [], (err: string, data: any): void => {
+            if (err) reject(err);
+            resolve(data.map(row => row.name));
+            });
+        });
+
+        db.close();
+        return dbs;
+    } catch (error: unknown) {
+      console.error(error as string);
+      return [];
+    }
 });
