@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a154a36d-d68c-4ac7-8466-9162004bd17c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/preload.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/preload.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +59,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;G:/Web Apps/DB-Reader-Electron-App&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/Web Apps/etrandevurls&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;SCSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -88,6 +85,7 @@
       <command value="cz" />
       <command value="?" />
       <command value="npm run start" />
+      <command value="git clone" />
     </option>
   </component>
   <component name="RunManager">
@@ -145,7 +143,8 @@
       <workItem from="1735257834297" duration="4793000" />
       <workItem from="1735262775665" duration="18003000" />
       <workItem from="1735406175074" duration="15629000" />
-      <workItem from="1735552922822" duration="2991000" />
+      <workItem from="1735552922822" duration="3248000" />
+      <workItem from="1735624497567" duration="1403000" />
     </task>
     <servers />
   </component>
