@@ -93,3 +93,5 @@ out/
 
 # Webstorm
 .idea/
+
+.db
