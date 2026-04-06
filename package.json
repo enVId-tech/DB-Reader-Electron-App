@@ -21,20 +21,20 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.11.1",
     "@electron-forge/plugin-fuses": "^7.11.1",
     "@electron-forge/plugin-vite": "^7.11.1",
-    "@electron/fuses": "^2.1.0",
+    "@electron/fuses": "^2.1.1",
     "@types/electron-squirrel-startup": "^1.0.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@typescript-eslint/eslint-plugin": "^8.56.1",
-    "@typescript-eslint/parser": "^8.56.1",
+    "@typescript-eslint/eslint-plugin": "^8.58.0",
+    "@typescript-eslint/parser": "^8.58.0",
     "cz-conventional-changelog": "^3.3.0",
-    "electron": "40.8.0",
-    "eslint": "^10.0.3",
+    "electron": "41.1.1",
+    "eslint": "^10.2.0",
     "eslint-plugin-import": "^2.32.0",
-    "sass-embedded": "^1.97.3",
+    "sass-embedded": "^1.99.0",
     "ts-node": "^10.9.2",
-    "typescript": "~5.9.3",
-    "vite": "^7.3.1"
+    "typescript": "~6.0.2",
+    "vite": "^8.0.3"
   },
   "keywords": [],
   "author": {
@@ -45,10 +45,10 @@
   "dependencies": {
     "db-reader-electron-app": "file:",
     "electron-squirrel-startup": "^1.0.1",
-    "npm-check-updates": "^19.6.3",
+    "npm-check-updates": "^20.0.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "scss": "^0.2.4",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^6.0.1"
   }
 }
