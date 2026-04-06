@@ -13,7 +13,7 @@
     "ncu": "ncu -u && npm install --force"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.11.1",
+    "@electron-forge/cli": "^7.6.1",
     "@electron-forge/maker-deb": "^7.11.1",
     "@electron-forge/maker-rpm": "^7.11.1",
     "@electron-forge/maker-squirrel": "^7.11.1",
@@ -27,7 +27,7 @@
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
-    "cz-conventional-changelog": "^3.3.0",
+    "cz-conventional-changelog": "^3.0.1",
     "electron": "41.1.1",
     "eslint": "^10.2.0",
     "eslint-plugin-import": "^2.32.0",
@@ -50,5 +50,13 @@
     "react-dom": "^19.2.4",
     "scss": "^0.2.4",
     "sqlite3": "^6.0.1"
+  },
+  "overrides": {
+    "make-fetch-happen": {
+      "tar": "^7.5.3"
+    },
+    "commitizen": {
+      "lodash": "^4.17.21"
+    }
   }
 }
