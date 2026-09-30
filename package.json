@@ -28,7 +28,7 @@
     "@typescript-eslint/eslint-plugin": "^8.59.3",
     "@typescript-eslint/parser": "^8.59.3",
     "cz-conventional-changelog": "^3.3.0",
-    "electron": "42.1.0",
+    "electron": "42.10.0",
     "eslint": "^10.4.0",
     "eslint-plugin-import": "^2.32.0",
     "sass-embedded": "^1.99.0",
